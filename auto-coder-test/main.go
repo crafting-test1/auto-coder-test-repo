@@ -3,5 +3,5 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("Hello Coding Agent!")
+    fmt.Println("Hello Crafting Sandbox Agent!")
 }
