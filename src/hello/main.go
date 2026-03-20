@@ -1,4 +1,4 @@
-// Go Hello World Application
+// Re-implemented Go Hello World Application
 package main
 
 import "fmt"
