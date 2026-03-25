@@ -1,8 +1,8 @@
-// Go Hello Crafting Application
+// Go Hello World Re-implementation
 package main
 
 import "fmt"
 
 func main() {
-	fmt.Println("Hello Crafting")
+	fmt.Println("Hello, World!")
 }
