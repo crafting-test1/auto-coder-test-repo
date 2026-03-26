@@ -1,8 +1,8 @@
-// Go Hello Crafting Application
+// Go Hello Application
 package main
 
 import "fmt"
 
 func main() {
-	fmt.Println("Hello Crafting")
+	fmt.Println("hello world, requested from Slack attachment")
 }
