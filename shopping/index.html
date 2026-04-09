@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopCraft — Modern Shopping</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🛍️ ShopCraft</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Discover Amazing Products</h1>
+      <p>Shop the latest trends with free shipping on orders over $50</p>
+      <a href="products.html" class="btn btn-primary">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- Featured Categories -->
+  <section class="categories section">
+    <div class="container">
+      <h2 class="section-title">Shop by Category</h2>
+      <div class="category-grid">
+        <div class="category-card" onclick="filterCategory('electronics')">
+          <div class="category-icon">💻</div>
+          <h3>Electronics</h3>
+          <p>Latest gadgets & devices</p>
+        </div>
+        <div class="category-card" onclick="filterCategory('clothing')">
+          <div class="category-icon">👗</div>
+          <h3>Clothing</h3>
+          <p>Fashion for every style</p>
+        </div>
+        <div class="category-card" onclick="filterCategory('home')">
+          <div class="category-icon">🏠</div>
+          <h3>Home & Living</h3>
+          <p>Make your space beautiful</p>
+        </div>
+        <div class="category-card" onclick="filterCategory('sports')">
+          <div class="category-icon">⚽</div>
+          <h3>Sports</h3>
+          <p>Gear up for the game</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured section">
+    <div class="container">
+      <h2 class="section-title">Featured Products</h2>
+      <div class="product-grid" id="featured-products"></div>
+      <div class="center-btn">
+        <a href="products.html" class="btn btn-outline">View All Products</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner -->
+  <section class="promo-banner">
+    <div class="container">
+      <h2>🎉 Limited Time Offer</h2>
+      <p>Use code <strong>SHOPCRAFT20</strong> for 20% off your first order!</p>
+      <a href="products.html" class="btn btn-white">Grab the Deal</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>🛍️ ShopCraft</h3>
+        <p>Your one-stop online destination for quality products at great prices.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Customer Care</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>support@shopcraft.com</p>
+        <p>1-800-SHOPCRAFT</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ShopCraft. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Render featured products (first 4)
+    const featured = products.slice(0, 4);
+    document.getElementById('featured-products').innerHTML = featured.map(renderProductCard).join('');
+    updateCartBadge();
+
+    function filterCategory(cat) {
+      window.location.href = `products.html?category=${cat}`;
+    }
+  </script>
+</body>
+</html>

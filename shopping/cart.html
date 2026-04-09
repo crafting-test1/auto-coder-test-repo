@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart — ShopCraft</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🛍️ ShopCraft</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html" class="active">Cart <span class="cart-badge" id="cart-count">0</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <h1>Shopping Cart</h1>
+      <p>Review your items before checkout</p>
+    </div>
+  </div>
+
+  <div class="cart-page section">
+    <div class="container cart-layout">
+      <!-- Cart Items -->
+      <div class="cart-items" id="cart-items-container">
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shipping">$0.00</span>
+        </div>
+        <div class="summary-row discount hidden" id="discount-row">
+          <span>Discount</span>
+          <span id="discount-amount" class="discount-value">-$0.00</span>
+        </div>
+        <hr />
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">$0.00</span>
+        </div>
+
+        <!-- Promo Code -->
+        <div class="promo-section">
+          <input type="text" id="promo-input" placeholder="Enter promo code" />
+          <button onclick="applyPromo()" class="btn btn-outline btn-sm">Apply</button>
+          <p class="promo-msg hidden" id="promo-msg"></p>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="checkout()" id="checkout-btn">
+          Proceed to Checkout
+        </button>
+        <a href="products.html" class="btn btn-outline btn-full" style="margin-top:10px;">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal hidden" id="checkout-modal">
+    <div class="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h2>🎉 Order Placed!</h2>
+      <p>Thank you for shopping with ShopCraft. Your order has been received and will be processed shortly.</p>
+      <p>A confirmation email will be sent to your address.</p>
+      <button class="btn btn-primary" onclick="clearCartAndClose()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>© 2026 ShopCraft. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const PROMO_CODES = { 'SHOPCRAFT20': 0.20, 'SAVE10': 0.10 };
+    let appliedDiscount = 0;
+
+    renderCart();
+    updateCartBadge();
+
+    function renderCart() {
+      const cart = getCart();
+      const container = document.getElementById('cart-items-container');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart">
+            <p>🛒 Your cart is empty.</p>
+            <a href="products.html" class="btn btn-primary">Start Shopping</a>
+          </div>`;
+        updateSummary(0);
+        document.getElementById('checkout-btn').disabled = true;
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-emoji">${item.emoji}</div>
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+          </div>
+          <div class="cart-item-controls">
+            <button onclick="changeQty(${item.id}, -1)">−</button>
+            <span>${item.quantity}</span>
+            <button onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+          <div class="cart-item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+          <button class="remove-btn" onclick="removeItem(${item.id})">🗑</button>
+        </div>
+      `).join('');
+
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      updateSummary(subtotal);
+    }
+
+    function updateSummary(subtotal) {
+      const shipping = subtotal > 50 ? 0 : subtotal > 0 ? 5.99 : 0;
+      const discountAmt = subtotal * appliedDiscount;
+      const total = subtotal + shipping - discountAmt;
+
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('shipping').textContent = shipping === 0 && subtotal > 0 ? 'Free' : `$${shipping.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+
+      const discountRow = document.getElementById('discount-row');
+      if (appliedDiscount > 0 && subtotal > 0) {
+        discountRow.classList.remove('hidden');
+        document.getElementById('discount-amount').textContent = `-$${discountAmt.toFixed(2)}`;
+      } else {
+        discountRow.classList.add('hidden');
+      }
+    }
+
+    function changeQty(id, delta) {
+      let cart = getCart();
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.quantity += delta;
+      if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
+      saveCart(cart);
+      renderCart();
+      updateCartBadge();
+    }
+
+    function removeItem(id) {
+      let cart = getCart().filter(i => i.id !== id);
+      saveCart(cart);
+      renderCart();
+      updateCartBadge();
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promo-input').value.trim().toUpperCase();
+      const msg = document.getElementById('promo-msg');
+      msg.classList.remove('hidden', 'success', 'error');
+
+      if (PROMO_CODES[code]) {
+        appliedDiscount = PROMO_CODES[code];
+        msg.textContent = `✅ Promo applied: ${Math.round(appliedDiscount * 100)}% off!`;
+        msg.classList.add('success');
+        renderCart();
+      } else {
+        appliedDiscount = 0;
+        msg.textContent = '❌ Invalid promo code.';
+        msg.classList.add('error');
+        renderCart();
+      }
+      msg.classList.remove('hidden');
+    }
+
+    function checkout() {
+      document.getElementById('checkout-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('checkout-modal').classList.add('hidden');
+    }
+
+    function clearCartAndClose() {
+      saveCart([]);
+      updateCartBadge();
+      closeModal();
+      window.location.href = 'products.html';
+    }
+  </script>
+</body>
+</html>
