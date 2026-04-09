@@ -1,0 +1,6 @@
+steps:
+  - label: ":go: Build"
+    command: "cd src/hello && go build ./..."
+
+  - label: ":go: Test"
+    command: "cd src/hello && go run main.go | grep -q 'Hello Crafting' && echo 'Output verified: Hello Crafting'"
