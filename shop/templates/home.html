@@ -1,0 +1,26 @@
+<section class="hero">
+    <h1>Welcome to CraftShop</h1>
+    <p>Discover amazing products at great prices</p>
+</section>
+
+<div class="toolbar">
+    <div class="toolbar-left">
+        <span class="result-info">Showing <strong>$result_count</strong> of $total_count products</span>
+    </div>
+    <div class="toolbar-right">
+        <form class="search-form" action="/" method="GET">
+            <input type="text" name="q" placeholder="Search products..." value="$search_value" class="search-input">
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        </form>
+        <form class="filter-form" action="/" method="GET">
+            <select name="category" onchange="this.form.submit()" class="category-select">
+                <option value="">All Categories</option>
+                $category_options
+            </select>
+        </form>
+    </div>
+</div>
+
+<div class="product-grid">
+    $product_cards
+</div>
