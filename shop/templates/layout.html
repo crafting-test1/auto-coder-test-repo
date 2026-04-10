@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$title</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo">🛒️ CraftShop</a>
+            <div class="nav-links">
+                <a href="/">Products</a>
+                <a href="/cart" class="cart-link">
+                    🛒 Cart (<span id="cart-count">0</span>)
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container main-content">
+        $body
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🛒️ CraftShop</h4>
+                    <p>Your one-stop shop for quality products.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="/">All Products</a>
+                    <a href="/cart">Shopping Cart</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <a href="/?category=Electronics">Electronics</a>
+                    <a href="/?category=Clothing">Clothing</a>
+                    <a href="/?category=Sports">Sports</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CraftShop. Built with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
